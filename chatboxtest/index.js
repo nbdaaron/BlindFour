@@ -23,6 +23,9 @@ io.on('connection', function(socket){
   		io.emit('chat message', "User " + id + " LEFT!!!!!");
   	});
   	socket.on('chat message', function(msg) {
+  		if (msg == "fuck") {
+  			msg = "i love ponies";
+  		}
   		console.log(msg);
   		io.emit('chat message', "User " + id + ": " + msg);
   	});

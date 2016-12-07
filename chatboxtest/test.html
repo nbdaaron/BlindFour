@@ -4,23 +4,33 @@
 	</head>
 	<body>
 		<h2>Ma test game gonna be here</h2>
-		<canvas id = "connect4" style="background-color:red"><p>Your browser doesn’t currently support HTML5 Canvas. 
+		<canvas id = "connect4"><p>Your browser doesn’t currently support HTML5 Canvas. 
     Please check caniuse.com/#feat=canvas for information on 
     browser support for canvas.</p></canvas>
+
+    
 	</body>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
 
 		var testpiece;
+		var background;
+		var board;
+		var canv;
 
 		function startGame() {
 
-			var canv = document.getElementById("connect4");
+			canv = document.getElementById("connect4");
 			canv.width=480;
 			canv.height=270;
 			canv.context = canv.getContext("2d");
 			canv.interval = setInterval(updateGameArea, 20);
+			canv.context.fillStyle="green";
+			canv.context.fillRect(0, 0, 480, 270);
+			background = new component(480, 270, "green", 0, 0, "connect4");
 			testpiece = new component(30, 30, "blue", 10, 120, "connect4");
+			board = new board(10, 10, "grey");
+
 
 		}
 
@@ -39,6 +49,23 @@
 		    }
 		}
 
+		function board(width, height, color) {
+			this.width=width;
+			this.height=height;
+			this.canvas = document.createElement("canvas");
+			this.context = this.canvas.getContext("2d");
+			this.fillStyle=color;
+			this.context.fillStyle = this.fillStyle;
+			this.context.fillRect(0, 0, width, height);
+			canv.context.drawImage(this.canvas, 10, 10);
+			this.update= function() {
+				canv.context.drawImage(this.canvas, 10, 10);
+				this.context.fillStyle=this.fillStyle;
+				this.context.fillRect(0, 0, this.width, this.height);
+			}
+			
+		}
+
 		function clear(canvasID) {
 			var canv = document.getElementById(canvasID);
 			canv.context.clearRect(0, 0, canv.width, canv.height);
@@ -46,7 +73,9 @@
 
 		function updateGameArea() {
 			clear("connect4");
+			background.update();
 			testpiece.update();
+			board.update();
 
 		}
 
