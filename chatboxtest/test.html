@@ -15,22 +15,35 @@
 
 		var testpiece;
 		var background;
-		var board;
+		var col = new Array(7);
 		var canv;
 
 		function startGame() {
 
 			canv = document.getElementById("connect4");
-			canv.width=480;
-			canv.height=270;
+			canv.width=490;
+			canv.height=420;
 			canv.context = canv.getContext("2d");
 			canv.interval = setInterval(updateGameArea, 20);
-			canv.context.fillStyle="green";
-			canv.context.fillRect(0, 0, 480, 270);
-			background = new component(480, 270, "green", 0, 0, "connect4");
-			testpiece = new component(30, 30, "blue", 10, 120, "connect4");
-			board = new board(10, 10, "grey");
+			canv.context.fillStyle="grey";
+			//canv.context.beginPath();
+			//canv.context.fillRect(0, 0, 490, 420);
+			//canv.context.closePath();
+			canv.context.fillStyle = "red";
+			canv.context.beginPath();
+			for (var i=0;i<6;i++) {
+				canv.context.arc(canv.width/7, canv.height/12+i*canv.height/6, canv.height/16, 0, 2*Math.PI);
+			}
+			canv.context.closePath();
+			canv.context.fill();
+			//canv.context.fillStyle = "grey";
 
+			background = new component(490, 420, "grey", 0, 0, "connect4");
+			//testpiece = new component(30, 30, "blue", 10, 120, "connect4");
+			for (var i=0;i<col.length;i++) {
+				col[i] = new column(canv.width/7, canv.height, /*(i%2==0)?"red":"blue"*/"rgba(0,0,0,0)", i*canv.width/7, 0);
+			}
+			canv.addEventListener('click', canvClicked(), false);
 
 		}
 
@@ -49,21 +62,69 @@
 		    }
 		}
 
-		function board(width, height, color) {
+		function column(width, height, color, startx, starty) {
 			this.width=width;
 			this.height=height;
+			this.startx = startx;
+			this.starty = starty;
 			this.canvas = document.createElement("canvas");
+			this.canvas.height=this.height;
+			this.canvas.width = this.width;
 			this.context = this.canvas.getContext("2d");
 			this.fillStyle=color;
 			this.context.fillStyle = this.fillStyle;
-			this.context.fillRect(0, 0, width, height);
-			canv.context.drawImage(this.canvas, 10, 10);
+			//this.context.fillRect(0, 0, width, height);
+			this.context.beginPath();
+			for (var i=0;i<6;i++) {
+				this.context.arc(width/2, height/12+i*height/6, height/16, 0, 2*Math.PI);
+			}
+			this.context.closePath();
+			this.context.fill();
+
+			canv.context.drawImage(this.canvas, startx, starty);
 			this.update= function() {
-				canv.context.drawImage(this.canvas, 10, 10);
+				canv.context.drawImage(this.canvas, this.startx, this.starty);
 				this.context.fillStyle=this.fillStyle;
-				this.context.fillRect(0, 0, this.width, this.height);
+				//this.context.fillRect(0, 0, this.width, this.height);
+				//this.canvas.height = this.height;
+				//this.canvas.width = this.width;
 			}
 			
+		}
+
+		function canvClicked() {
+
+		}
+
+		function play(color, column, row){ 
+			var curr = col[parseInt(column)];
+			curr.context.fillStyle = color;
+			curr.context.beginPath();
+			curr.context.arc(curr.width/2, curr.height/12+parseInt(row)*curr.height/6, curr.height/16, 0, 2*Math.PI);
+			curr.context.closePath();
+			curr.context.fill();
+			curr.context.fillStyle = curr.fillStyle;
+		}
+
+		function update(targetX, targetY){
+		    var tx = targetX -x,
+		        ty = targetY - y,
+		        dist = Math.sqrt(tx*tx+ty*ty),
+		        rad = Math.atan2(ty,tx),
+		        angle = rad/Math.PI * 180;
+
+		        velX = (tx/dist)*speed,
+		        velY = (ty/dist)*speed;
+
+		        x += velX
+		        y += velY
+
+		        ctx.clearRect(0,0,500,500);
+		        ctx.beginPath();
+		        ctx.arc(x,y,5,0,Math.PI*2);
+		        ctx.fill();
+
+		    setTimeout(update,10);
 		}
 
 		function clear(canvasID) {
@@ -72,10 +133,12 @@
 		}
 
 		function updateGameArea() {
-			clear("connect4");
-			background.update();
-			testpiece.update();
-			board.update();
+			//clear("connect4");
+			//background.update();
+			//testpiece.update();
+			for (var i=0;i<col.length;i++) {
+				//col[i].update();
+			}
 
 		}
 
