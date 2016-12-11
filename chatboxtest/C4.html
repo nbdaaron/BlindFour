@@ -4,6 +4,7 @@
 	</head>
 	<body>
 		<canvas id="back" width = 490 height=480><p>Ur browser sux u can't even load da game lolz</p></canvas>
+		<button id = "reset" type="submit" onclick = "resetGame();" style="display:none;width:490px;height:50px;font-size:30px">Reset Game</button>
 
 	</body>
 
@@ -127,16 +128,27 @@
 			startr++;
 			startc--;
 			//console.log(startc + " "+ startr);
+		}
+
+		for (var i=0;i<grid.length;i++) {
+			for (var j=0;j<grid[0].length;j++) {
+				if (grid[i][j]==null)
+					return null;
+			}
 		}		
 
-		return null;
+		return "tie";
 
 	}
 
 	function winner(stats) {
 		enabled = false;
-		drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);
-		alert(stats.c + " wins!!!");
+		document.getElementById("reset").style.display = "block";
+		if (stats == "tie") alert("There's a tie!!!");
+		else {
+			drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);
+			alert(stats.c + " wins!!!");
+		}
 	}
 
 	function dropPiece() {
@@ -214,9 +226,11 @@
 	}
 
 	function resetGame() {
+		document.getElementById("reset").style.display = "none";
 		enabled = true;
 		context.clearRect(0,0,board.width, board.height);
 		context.fillStyle="grey";
+		context.globalCompositeOperation="source-over";
 		context.fillRect(0, 0, 490, 480);
 		context.globalCompositeOperation = 'destination-out';
 		context.fillStyle="rgba(0,0,0,1)";
