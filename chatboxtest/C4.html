@@ -12,6 +12,7 @@
 	var board = document.createElement("canvas");
 	var grid = new Array(6);
 	var player1 = true;
+	var enabled = true;
 
 	for (var i=0;i<grid.length;i++) {
 		grid[i]= new Array(7);
@@ -133,6 +134,7 @@
 	}
 
 	function winner(stats) {
+		enabled = false;
 		drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);
 		alert(stats.c + " wins!!!");
 	}
@@ -187,6 +189,7 @@
 	}
 
 	function mouseClick(event) {
+		if (!enabled) return;
 		var col = getColFromPos(getCursorPosition(back, event));
 		for (var i=grid.length-1;i>=0;i--) {
 			if (grid[parseInt(i)][parseInt(col)] == null){
@@ -211,6 +214,7 @@
 	}
 
 	function resetGame() {
+		enabled = true;
 		context.clearRect(0,0,board.width, board.height);
 		context.fillStyle="grey";
 		context.fillRect(0, 0, 490, 480);
