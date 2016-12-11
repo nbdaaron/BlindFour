@@ -13,6 +13,10 @@ app.get('/test', function(req, res){
 	res.sendFile(__dirname+'/test.html');
 });
 
+app.get('/c4', function(req, res) {
+  res.sendFile(__dirname+'/C4.html');
+})
+
 app.use(express.static('static'))
 
 io.on('connection', function(socket){
