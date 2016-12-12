@@ -2,6 +2,7 @@
   "name": "chatbox",
   "version": "0.0.1",
   "description": "my first socket.io app",
+  "scripts": { "start": "index.js" },
   "dependencies": {
     "express": "^4.14.0",
     "http": "0.0.0",
