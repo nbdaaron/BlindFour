@@ -1,10 +1,13 @@
 <html>
 	<head>
-		<title>Connect 4 Board?</title>
+		<title>BLIND-FOUR</title>
 	</head>
-	<body>
+	<body style="text-align:center;">
+	<h1>Blind-Four</h1>
+	<h3>Test your memory and your skills! Try this Connect-Four-Like game and see if you can get four in a row! Except, there's a twist: you can't see which pieces are yours! </h3>
 		<canvas id="back" width = 490 height=480><p>Ur browser sux u can't even load da game lolz</p></canvas>
-		<button id = "reset" type="submit" onclick = "resetGame();" style="display:none;width:490px;height:50px;font-size:30px">Reset Game</button>
+		<h2 id="winnertext"> Player 1's turn! </h2>
+		<button id = "reset" type="submit" onclick = "resetGame();" style="display:none;width:490px;height:50px;font-size:30px;margin: auto;margin-top: 10px;">Reset Game</button>
 
 	</body>
 
@@ -41,8 +44,9 @@
 
 	function play(colo, colu, row) {
 		pieces[++lastPiece] = {
-			col: colo,		//For yellow versus green
-			//col: "blue",	//For blue versus blue
+			//col: colo,		//For yellow versus green (REGULAR CONNECT-FOUR)
+			p: (player1?1:2),
+			col: "blue",		//For blue versus blue (BLIND FOUR)
 			c: parseInt(colu),
 			r: parseInt(row), 
 			y: 0
@@ -147,11 +151,26 @@
 	function winner(stats) {
 		enabled = false;
 		document.getElementById("reset").style.display = "block";
-		if (stats == "tie") alert("There's a tie!!!");
+		if (stats == "tie") {
+			document.getElementById("winnertext").innerHTML = "It's a tie!";
+			document.getElementById("winnertext").style.display = "block";
+			reveal();
+		}
 		else {
 			drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);	
+			document.getElementById("winnertext").innerHTML = "Player " + (player1?"2":"1") + " is the winner!";
+			document.getElementById("winnertext").style.display = "block";
+			reveal();
 		}
 
+	}
+
+	function reveal() {
+		for (var i=0;i<=lastPiece;i++) {
+			if (pieces[i].p==1) pieces[i].col = "orange";
+			else if (pieces[i].p==2) pieces[i].col = "green";
+		}
+		dropPiece();
 	}
 
 	function dropPiece() {
@@ -219,6 +238,7 @@
 				//console.log("col: " + col + " row: " + i);
 				play(player1?"yellow":"green", col, i);
 				player1 = !player1;
+				document.getElementById("winnertext").innerHTML = "Player " + (player1?"1":"2") + "'s turn!";
 				return;
 			}
 		}
@@ -239,6 +259,8 @@
 
 	function resetGame() {
 		document.getElementById("reset").style.display = "none";
+		document.getElementById("winnertext").innerHTML = "Player " + (player1?"1":"2") + "'s turn!";
+		//document.getElementById("winnertext").style.display = "none";
 		enabled = true;
 		context.clearRect(0,0,board.width, board.height);
 		context.fillStyle="grey";

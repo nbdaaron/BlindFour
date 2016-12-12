@@ -6,11 +6,11 @@ var io = require('socket.io')(http);
 var currID = 1;
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname+'/index.html');
+  res.sendFile(__dirname+'/C4.html');
 });
 
 app.get('/test', function(req, res){ 
-	res.sendFile(__dirname+'/test.html');
+	res.sendFile(__dirname+'/index.html');
 });
 
 app.get('/c4', function(req, res) {
