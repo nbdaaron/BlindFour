@@ -14,6 +14,7 @@
 	var grid = new Array(6);
 	var player1 = true;
 	var enabled = true;
+	var win =null;
 
 	for (var i=0;i<grid.length;i++) {
 		grid[i]= new Array(7);
@@ -27,7 +28,7 @@
 	var context = board.getContext("2d");
 	var pieces = new Array();
 	var lastPiece = -1;
-	var currPlay;
+	var currPlay= new Array();
 	
 	
 	//context.restore();
@@ -40,16 +41,18 @@
 
 	function play(colo, colu, row) {
 		pieces[++lastPiece] = {
-			col: colo,
+			col: colo,		//For yellow versus green
+			//col: "blue",	//For blue versus blue
 			c: parseInt(colu),
 			r: parseInt(row), 
 			y: 0
 		};
-		console.log(colo + " " + colu + " " + row);
+		//console.log(colo + " " + colu + " " + row);
 		grid[parseInt(row)][parseInt(colu)] = colo;
-		currPlay = setInterval(dropPiece, 20);
-		var win = checkWin(colo, parseInt(colu), parseInt(row));
-		if (win != null) winner(win);
+		currPlay[currPlay.length] = setInterval(dropPiece, 20);
+		win = checkWin(colo, parseInt(colu), parseInt(row));
+
+		
 	}
 
 	function checkWin(color, col, row) {
@@ -90,7 +93,7 @@
 			startc--;
 			startr--;
 		}
-		console.log(startc + " " + startr);
+		//console.log(startc + " " + startr);
 		while (startc<grid[0].length && startr < grid.length) {
 			if (grid[startr][startc] == color) count++;
 			else count=0;
@@ -104,7 +107,7 @@
 			}
 			startr++;
 			startc++;
-			console.log(startc + " " + startr);
+			//console.log(startc + " " + startr);
 		}
 
 		count=0;
@@ -146,9 +149,9 @@
 		document.getElementById("reset").style.display = "block";
 		if (stats == "tie") alert("There's a tie!!!");
 		else {
-			drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);
-			alert(stats.c + " wins!!!");
+			drawLine(stats.fromc, stats.fromr, stats.toc, stats.tor);	
 		}
+
 	}
 
 	function dropPiece() {
@@ -163,7 +166,15 @@
 				backContext.closePath();
 				backContext.fill();
 			}
-			clearInterval(currPlay);
+			for (var i=0;i<currPlay.length;i++) {
+				clearInterval(currPlay[i]);
+			}
+			if (win != null) {
+				var a = win;
+				win = null;
+				winner(a); 
+			}
+
 			return;
 		}
 		else if (lastPiece >= 0) {
@@ -205,7 +216,7 @@
 		var col = getColFromPos(getCursorPosition(back, event));
 		for (var i=grid.length-1;i>=0;i--) {
 			if (grid[parseInt(i)][parseInt(col)] == null){
-				console.log("col: " + col + " row: " + i);
+				//console.log("col: " + col + " row: " + i);
 				play(player1?"yellow":"green", col, i);
 				player1 = !player1;
 				return;
@@ -223,6 +234,7 @@
 		context.closePath();
 		context.stroke();
 		dropPiece();
+			return;
 	}
 
 	function resetGame() {
