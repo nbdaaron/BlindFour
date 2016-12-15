@@ -1,8 +1,38 @@
 <html>
 	<head>
 		<title>BLIND-FOUR</title>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io('/C4');
+			socket.emit('c4', 'test message');
+
+
+			var board = document.createElement("canvas");
+			var grid = new Array(6);
+			var player1 = true;
+			var enabled = true;
+			var win =null;
+
+			for (var i=0;i<grid.length;i++) {
+				grid[i]= new Array(7);
+			}
+
+			board.width="490";
+			board.height="480";
+			
+
+
+			var context = board.getContext("2d");
+			var pieces = new Array();
+			var lastPiece = -1;
+			var currPlay= new Array();
+			
+			
+			//context.restore();
+			
+		</script>
 	</head>
-	<body style="text-align:center;">
+	<body style="text-align:center;" onload="dropPiece();">
 	<h1>Blind-Four</h1>
 	<h3>Test your memory and your skills! Try this Connect-Four-Like game and see if you can get four in a row! Except, there's a twist: you can't see which pieces are yours! </h3>
 		<canvas id="back" width = 490 height=480><p>Ur browser sux u can't even load da game lolz</p></canvas>
@@ -12,30 +42,10 @@
 	</body>
 
 	<script>
+
 	var back = document.getElementById("back");
-	var board = document.createElement("canvas");
-	var grid = new Array(6);
-	var player1 = true;
-	var enabled = true;
-	var win =null;
-
-	for (var i=0;i<grid.length;i++) {
-		grid[i]= new Array(7);
-	}
-
-	board.width="490";
-	board.height="480";
-	back.addEventListener("mouseup", mouseClick, false);
 	var backContext = back.getContext("2d");
-
-	var context = board.getContext("2d");
-	var pieces = new Array();
-	var lastPiece = -1;
-	var currPlay= new Array();
-	
-	
-	//context.restore();
-	resetGame();
+	back.addEventListener("mouseup", mouseClick, false);
 	backContext.drawImage(board,0,0);
 
 	backContext.fillStyle="white";
@@ -288,6 +298,8 @@
 		dropPiece();
 	}
 
+	dropPiece();
+	resetGame();
 	
 	</script>
 </html>
