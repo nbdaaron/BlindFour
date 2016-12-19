@@ -202,11 +202,16 @@
 				var a = win;
 				win = null;
 				winner(a); 
+				enabled = false;
+			}
+			else {
+				enabled = true;
 			}
 
 			return;
 		}
 		else if (lastPiece >= 0) {
+			enabled=false;
 			for (var i=0;i<lastPiece;i++) {
 				backContext.fillStyle = pieces[i].col;
 				backContext.beginPath();
@@ -246,6 +251,7 @@
 		for (var i=grid.length-1;i>=0;i--) {
 			if (grid[parseInt(i)][parseInt(col)] == null){
 				//console.log("col: " + col + " row: " + i);
+				enabled = false;
 				play(player1?"yellow":"green", col, i);
 				player1 = !player1;
 				document.getElementById("winnertext").innerHTML = "Player " + (player1?"1":"2") + "'s turn!";
